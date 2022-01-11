@@ -1,0 +1,23 @@
+{
+  "name": "ulykkesskjema",
+  "version": "0.0.1",
+  "description": "An avalanche incident reporting form.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --config webpack.config.js --mode development",
+    "build": "webpack --config webpack.config.js --mode production",
+    "start": "python src/main.py"
+  },
+  "author": "Aron Widforss (Norwegian Water Resources and Energy Directorate)",
+  "license": "MIT",
+  "dependencies": {
+    "@types/ol": "^6.5.3",
+    "@types/proj4": "^2.5.2",
+    "ol": "^6.11.0",
+    "proj4": "^2.7.5",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.7",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1"
+  }
+}
