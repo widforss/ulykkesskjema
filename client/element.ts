@@ -1,7 +1,7 @@
 import {Button, DateInput, HelpText, ImageInput, IntegerInput, KdvSelectInput, Language, MapInput, SelectInput, SubmitMessage, TextContent, TextInput} from "./types";
 import { fetchTranslations } from "./translations";
 import { makeRequest } from "./fetch";
-import { getCenter, initMap } from "./ol";
+import { MapContainer } from "./ol";
 
 interface Registration {
     DtObsTime: string,
@@ -9,6 +9,7 @@ interface Registration {
     ObsLocation: {
         Latitude: number,
         Longitude: number,
+        Uncertainty: number,
     },
     Incident: {
         ActivityInfluencedTID: number,
@@ -47,6 +48,7 @@ export class Form {
         ObsLocation: {
             Latitude: null,
             Longitude: null,
+            Uncertainty: null,
         },
         Incident: {
             ActivityInfluencedTID: null,
@@ -68,7 +70,10 @@ export class Form {
 
     createTextContent(spec: TextContent, lang: Language): HTMLElement {
         let title = document.createElement(spec.level);
-        title.innerText = spec.title[lang];
+        title.innerHTML = spec.title[lang];
+        if (spec.level != "h1") {
+            title.classList.add("input-container");
+        }
         return title;
     }
 
@@ -112,19 +117,44 @@ export class Form {
         }
     }
 
-    createMapInput(parent: HTMLElement): HTMLDivElement {
+    createMapInput(parent: HTMLElement, spec: MapInput, lang: Language): HTMLDivElement {
         let container = document.createElement("div");
+        let mapDiv = document.createElement("div");
+        mapDiv.classList.add("input-container");
         container.classList.add("input-container");
-        container.classList.add("map-input");
+        mapDiv.classList.add("map-input");
         parent.appendChild(container);
-        let map = initMap(container);
+        container.appendChild(mapDiv);
+
+        let map = new MapContainer(mapDiv);
         let setLocation = () => {
-            let coord = getCenter(map);
+            let coord = map.getCenter();
             this.registration.ObsLocation.Latitude = coord.y;
             this.registration.ObsLocation.Longitude = coord.x;
         }
-        map.on("moveend", setLocation);
+        map.map.on("moveend", setLocation);
         setLocation();
+
+        let [selectContainer, select] = createInput<HTMLSelectElement>("select", `${spec.accuracyTitle[lang]}:`, null);
+        container.appendChild(selectContainer);
+        select.onchange = () => {
+            if (!isNaN(Number(select.value))) {
+                this.registration.ObsLocation.Uncertainty = Number(select.value);
+                map.setAccuracy(this.registration.ObsLocation.Uncertainty);
+            } else {
+                this.registration.ObsLocation.Uncertainty = null;
+                map.setAccuracy(null);
+            }
+        };
+        let emptyOption = document.createElement("option");
+        select.appendChild(emptyOption);
+        Object.entries(spec.accuracy).forEach(([key, entry]) => {
+            let option = document.createElement("option");
+            select.appendChild(option);
+            option.value = key;
+            option.innerText = entry[lang];
+        });
+
         return container;
     }
 

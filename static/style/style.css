@@ -109,6 +109,17 @@ h1 {
     position: absolute;
     top: calc(50% - 20px);
     left: calc(50% - 20px);
+    pointer-events: none;
+}
+
+.map-circle {
+    display: none;
+    position: absolute;
+    border-style: solid;
+    box-sizing: border-box;
+    background-color: #da00ee27;
+    border-color: #da00ee;
+    pointer-events: none;
 }
 
 .hidden {

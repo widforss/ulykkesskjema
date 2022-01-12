@@ -24,7 +24,7 @@ const TILE_URL = 'https://opencache.statkart.no/gatekeeper/gk/gk.open_wmts/?';
 const PROJECTION = 'EPSG:25833';
 const PROJECTION_EXTENT: Extent = [-2500000, 6420992, 1130000, 9045984];
 const VIEW_EXTENT: Extent = [-1100000, 5450000, 2130000, 9000000];
-const MIN_ZOOM = 6;
+const MIN_ZOOM = 3;
 const MAX_ZOOM = 17;
 const RESOLUTIONS = [
     21664,

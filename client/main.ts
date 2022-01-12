@@ -24,7 +24,7 @@ Object.entries(CONTENT).forEach(([id, content]) => {
             break;
         }
         case "Map": {
-            form.createMapInput(root);
+            form.createMapInput(root, content, lang);
             break;
         }
         case "Date": {

@@ -7,17 +7,84 @@ export const CONTENT: Form = {
         type: "TextContent",
         level: "h1",
         title: {
-            en: "Report avalanche incident",
-            nb: "Rapportere skredhendelse",
+            en: "Report avalanche incident anonymously",
+            nb: "Rapportere skredhendelse anonymt",
         }
     },
     help: {
-        type: "Help",
-        registration: 26,
-        geohazard: 10,
+        type: "TextContent",
+        level: "div",
+        title: {
+            en: `
+                <p>
+                    We want to collect as much information as possible about accidents, near misses, and other
+                    incidents related to snow avalanches. The information will be used as a part of Varsoms
+                    preventive work to avoid avalanche incidents in the future.
+                </p>
+                <p>
+                    Feel free to fill in as many fields as possible about the conditions around the avalanche.
+                    You can submit information about the avalanche itself, the cause, and the course of action,
+                    as well as reflections on how you could have avoided the avalanche? How much information you
+                    want to submit is up to you.
+                </p>
+                <p>
+                    If there are several relevant choices under "damage extent", choose the one with the most
+                    significant social consequence.
+                </p>
+                <p>
+                    Information submitted in this form will be published on www.regobs.no by the user “Ulykkesskjema”.
+                </p>
+            `,
+            nb: `
+                <p>
+                    Vi ønsker å samle inn så mye informasjon som mulig om ulykker, nestenulykker og andre hendelser
+                    knyttet til snøskred. Dette vil være en del av det forebyggende arbeidet med å unngå
+                    skredhendelser i framtiden.
+                </p>
+                <p>
+                    Her kan du registrere fakta om selve skredet, om årsaken og forløpet, samt refleksjoner om
+                    hvordan skredet kunne vært unngått? Hvor mye informasjon du ønsker å legge til der er opp til
+                    deg. Fyll gjerne ut så mange felt som mulig slik at vi får god info om forholdene rundt skredet.
+                </p>
+                <p>
+                    Hvis det er flere valg som er aktuelle under "skadeomfang" velger du det som gir størst
+                    samfunnsmessig konsekvens.
+                </p>
+                <p>
+                    Informasjonen som blir sendt inn via dette skjemaet vil bli publisert på www.regobs.no under
+                    brukeren «Ulykkesskjema».
+                </p>
+            `,
+        }
     },
     map: {
         type: "Map",
+        accuracyTitle: {
+            en: "Accuracy",
+            nb: "Nøyaktighet",
+        },
+        accuracy: {
+            0: {
+                en: "Exact",
+                nb: "Eksakt",
+            },
+            100: {
+                en: "100 m",
+                nb: "100 m",
+            },
+            500: {
+                en: "500 m",
+                nb: "500 m",
+            },
+            1000: {
+                en: "1 km",
+                nb: "1 km",
+            },
+            '-1': {
+                en: "More than 1 km",
+                nb: "Mer enn 1 km",
+            }
+        }
     },
     date: {
         type: "Date",

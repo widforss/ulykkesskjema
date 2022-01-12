@@ -19,7 +19,7 @@ export interface FormMember {
 
 export interface TextContent extends FormMember {
     type: "TextContent",
-    level: "h1",
+    level: "h1" | "div",
     title: MultiLingualString,
 }
 
@@ -38,6 +38,8 @@ export interface HelpText extends FormMember {
 
 export interface MapInput extends FormMember {
     type: "Map",
+    accuracyTitle: MultiLingualString,
+    accuracy: {[key: number]: MultiLingualString},
 }
 
 export interface DateInput extends FormMember {
