@@ -39,7 +39,7 @@ class MapContainer {
         this.accuracy = accuracy
         if (accuracy && accuracy > 0) {
             let resolution = this.map.getView().getResolution();
-            let size = accuracy / resolution;
+            let size = 2 * accuracy / resolution;
             this.accuracyCircle.style.display = "block";
             this.accuracyCircle.style.width = `${size}px`;
             this.accuracyCircle.style.height = `${size}px`;
