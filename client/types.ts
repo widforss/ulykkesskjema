@@ -7,6 +7,7 @@ export interface Form {
         | KdvSelectInput
         | SelectInput
         | IntegerInput
+        | KdvIntegerInput
         | TextInput
         | ImageInput
         | Button
@@ -69,6 +70,15 @@ export interface IntegerInput extends FormMember {
     title: MultiLingualString,
     min: number,
     max: number,
+}
+
+export interface KdvIntegerInput extends FormMember {
+    type: "KdvInteger",
+    titleKey: string[],
+    preprocessing: (value: number) => number
+    min: number,
+    max: number,
+    key: string[],
 }
 
 export interface ImageInput extends FormMember {

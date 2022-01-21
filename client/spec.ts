@@ -32,7 +32,14 @@ export const CONTENT: Form = {
                     significant social consequence.
                 </p>
                 <p>
-                    Information submitted in this form will be published on www.regobs.no by the user “Ulykkesskjema”.
+                    Information submitted in this form will be published on
+                    <a href="https://www.regobs.no/">www.regobs.no</a> by the user “Ulykkesskjema”.
+                </p>
+                <p>
+                    Remember to focus on learning and facts. Do not speculate or assign blame. All information
+                    submitted must be anonymised. Information you wish to share exclusively with the Avalanche
+                    Warning Service should be sent to
+                    <a href="mailto:snoskredvarslingen@nve.no">snoskredvarslingen@nve.no</a>. Thanks for sharing!
                 </p>
             `,
             nb: `
@@ -44,15 +51,22 @@ export const CONTENT: Form = {
                 <p>
                     Her kan du registrere fakta om selve skredet, om årsaken og forløpet, samt refleksjoner om
                     hvordan skredet kunne vært unngått? Hvor mye informasjon du ønsker å legge til der er opp til
-                    deg. Fyll gjerne ut så mange felt som mulig slik at vi får god info om forholdene rundt skredet.
+                    deg. Fyll gjerne ut så mange felt som mulig slik at vi får god info om forholdene rundt skredet,
+                    som også er viktig for de som skriver varslene.
                 </p>
                 <p>
                     Hvis det er flere valg som er aktuelle under "skadeomfang" velger du det som gir størst
                     samfunnsmessig konsekvens.
                 </p>
                 <p>
-                    Informasjonen som blir sendt inn via dette skjemaet vil bli publisert på www.regobs.no under
-                    brukeren «Ulykkesskjema».
+                    Informasjonen som blir sendt inn via dette skjemaet vil bli publisert på
+                    <a href="https://www.regobs.no/">www.regobs.no</a> under brukeren «Ulykkesskjema».
+                </p>
+                <p>
+                    Husk å fokusere på læring og fakta, ikke spekuler eller fordel skyld. All informasjon som
+                    registreres skal være anonymisert. Informasjon du kun skal dele med Snøskredvarslingen sendes
+                    <a href="mailto:snoskredvarslingen@nve.no">snoskredvarslingen@nve.no</a>. Tusen takk for at dere
+                    deler!
                 </p>
             `,
         }
@@ -60,8 +74,8 @@ export const CONTENT: Form = {
     map: {
         type: "Map",
         accuracyTitle: {
-            en: "Accuracy",
-            nb: "Nøyaktighet",
+            en: "Spatial accuracy",
+            nb: "Stedsnøyaktighet",
         },
         accuracy: {
             0: {
@@ -112,8 +126,8 @@ export const CONTENT: Form = {
     groundActivity: {
         type: "Select",
         title: {
-            en: "Ground activity",
-            nb: "Bakkeaktivitet",
+            en: "Phase of tour",
+            nb: "Turfase",
         },
         select: [
             {
@@ -196,6 +210,20 @@ export const CONTENT: Form = {
         selectKey: ["KdvRepositories", "Snow_DestructiveSizeKDV"],
         key: ["AvalancheObs", "DestructiveSizeTID"]
     },
+    avalancheTrigger: {
+        type: "KdvSelect",
+        titleKey: ["REGISTRATION", "SNOW", "AVALANCHE_OBS", "AVALANCHE_TRIGGER"],
+        selectKey: ["KdvRepositories", "Snow_AvalancheTriggerKDV"],
+        key: ["AvalancheObs", "AvalancheTriggerTID"]
+    },
+    fractureHeight: {
+        type: "KdvInteger",
+        titleKey: ["REGISTRATION", "SNOW", "AVALANCHE_OBS", "FRACTURE_HEIGTH"],
+        preprocessing: (value) => value / 100,
+        min: 0,
+        max: 1000,
+        key: ["AvalancheObs", "FractureHeight"],
+    },
     weakLayer: {
         type: "KdvSelect",
         titleKey: ["REGISTRATION", "SNOW", "AVALANCHE_OBS", "AVAL_CAUSE"],
@@ -239,12 +267,12 @@ export const CONTENT: Form = {
         type: "Select",
         title: {
             en: "Local or traveller?",
-            nb: "Lokal eller på reise?"
+            nb: "Lokal eller tilreisende"
         },
         select: [
             {
                 en: "Local",
-                nb: "Lokalboende",
+                nb: "Lokal",
             },
             {
                 en: "Lives in region",
@@ -255,8 +283,8 @@ export const CONTENT: Form = {
                 nb: "Bor i Norge",
             },
             {
-                en: "Foreigner",
-                nb: "Utlenning",
+                en: "Foreign tourist",
+                nb: "Utenlandsk turist",
             },
             {
                 en: "Unknown",

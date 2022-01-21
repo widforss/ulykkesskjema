@@ -43,6 +43,10 @@ Object.entries(CONTENT).forEach(([id, content]) => {
             root.appendChild(form.createInteger(id, content, lang));
             break;
         }
+        case "KdvInteger": {
+            root.appendChild(form.createKdvInteger(id, content, lang));
+            break;
+        }
         case "Image": {
             root.appendChild(form.createImage(id, content, lang));
             break;

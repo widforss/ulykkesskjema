@@ -1,4 +1,4 @@
-import {Button, DateInput, HelpText, ImageInput, IntegerInput, KdvSelectInput, Language, MapInput, SelectInput, SubmitMessage, TextContent, TextInput} from "./types";
+import {DateInput, HelpText, ImageInput, KdvIntegerInput, IntegerInput, KdvSelectInput, Language, MapInput, SelectInput, TextContent, TextInput, Button, SubmitMessage} from "./types";
 import { fetchTranslations } from "./translations";
 import { makeRequest } from "./fetch";
 import { MapContainer } from "./ol";
@@ -235,6 +235,35 @@ export class Form {
             } else {
                 input.classList.remove("invalid-input");
                 this.specialQ[id] = `${spec.title[lang]}: ${input.value}`;
+            }
+        }
+        input.type = "number";
+        input.min = spec.min.toString();
+        input.max = spec.max.toString();
+        input.step = "1";
+        return container;
+    }
+
+    createKdvInteger(id: string, spec: KdvIntegerInput, lang: Language): HTMLElement {
+        let translations: any = TRANSLATIONS[lang].app;
+        let titleKey = [...spec.titleKey];
+        while (titleKey.length) {
+            translations = translations[titleKey.shift()]
+        }
+        let titleText: string = translations;
+
+        let [container, input] = createInput<HTMLInputElement>("input", `${translations}:`, id);
+        input.oninput = () => {
+            let value = Number(input.value);
+            if (isNaN(value) || spec.min > value || spec.max < value) {
+                input.classList.add("invalid-input");
+            } else {
+                input.classList.remove("invalid-input");
+                input.oninput = () => {
+                    let value = Number(input.value);
+                    value = spec.preprocessing ? spec.preprocessing(value) : value;
+                    setInput(Number(input.value), spec.key, this.registration);
+                }
             }
         }
         input.type = "number";
