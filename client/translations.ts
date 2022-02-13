@@ -32,7 +32,7 @@ type Translation = {
     help: Help[],
 }
 
-interface Translations {
+export interface Translations {
     en: Translation,
     nb: Translation,
 }

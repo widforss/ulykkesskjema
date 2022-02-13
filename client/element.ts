@@ -1,5 +1,5 @@
 import {DateInput, HelpText, ImageInput, KdvIntegerInput, IntegerInput, KdvSelectInput, Language, MapInput, SelectInput, TextContent, TextInput, Button, SubmitMessage} from "./types";
-import { fetchTranslations } from "./translations";
+import { fetchTranslations, Translations } from "./translations";
 import { makeRequest } from "./fetch";
 import { MapContainer } from "./ol";
 
@@ -34,7 +34,8 @@ interface Registration {
     }[]
 }
 
-const TRANSLATIONS = await fetchTranslations();
+const global = window as any;
+const SITEKEY = "6LcQ0nceAAAAALaEs5JSLdo-06QD1B6cZ87_QlJi";
 
 const LANG_KEYS = {
     nb: 1,
@@ -77,9 +78,9 @@ export class Form {
         return title;
     }
 
-    createHelpText(spec: HelpText, lang: Language): HTMLElement {
+    createHelpText(spec: HelpText, lang: Language, translations: Translations): HTMLElement {
         let text = document.createElement("div");
-        let textContent = TRANSLATIONS[lang].help.filter((entry) => 
+        let textContent = translations[lang].help.filter((entry) => 
             entry.RegistrationTID == spec.registration
             && entry.GeoHazardTID == spec.geohazard
             && entry.LangKey == LANG_KEYS[lang]
@@ -179,15 +180,15 @@ export class Form {
         return container;
     }
 
-    createKdvSelect(id: string, spec: KdvSelectInput, lang: Language): HTMLElement {
-        let translations: any = TRANSLATIONS[lang].app;
+    createKdvSelect(id: string, spec: KdvSelectInput, lang: Language, translations: Translations): HTMLElement {
+        let translation: any = translations[lang].app;
         let titleKey = [...spec.titleKey];
         while (titleKey.length) {
-            translations = translations[titleKey.shift()]
+            translation = translation[titleKey.shift()]
         }
-        let titleText: string = translations;
+        let titleText: string = translation;
 
-        let kdv: any = TRANSLATIONS[lang].kdv;
+        let kdv: any = translations[lang].kdv;
         let selectKey = [...spec.selectKey];
         while (selectKey.length) {
             kdv = kdv[selectKey.shift()];
@@ -244,15 +245,15 @@ export class Form {
         return container;
     }
 
-    createKdvInteger(id: string, spec: KdvIntegerInput, lang: Language): HTMLElement {
-        let translations: any = TRANSLATIONS[lang].app;
+    createKdvInteger(id: string, spec: KdvIntegerInput, lang: Language, translations: Translations): HTMLElement {
+        let translation: any = translations[lang].app;
         let titleKey = [...spec.titleKey];
         while (titleKey.length) {
-            translations = translations[titleKey.shift()]
+            translation = translation[titleKey.shift()]
         }
-        let titleText: string = translations;
+        let titleText: string = translation;
 
-        let [container, input] = createInput<HTMLInputElement>("input", `${translations}:`, id);
+        let [container, input] = createInput<HTMLInputElement>("input", `${titleText}:`, id);
         input.oninput = () => {
             let value = Number(input.value);
             if (isNaN(value) || spec.min > value || spec.max < value) {
@@ -319,8 +320,19 @@ export class Form {
     createButton(spec: Button, lang: Language): HTMLElement {
         let container = document.createElement("div");
         container.classList.add("input-container");
+        let captchaContainer = document.createElement("div");
+        captchaContainer.classList.add("input-container");
+        container.appendChild(captchaContainer);
         let button = document.createElement("button");
+        button.classList.add("hidden");
         container.appendChild(button);
+
+        let captchaId = global.grecaptcha.render(captchaContainer, {
+            sitekey: SITEKEY,
+            callback: () => button.classList.remove("hidden"),
+            "expired-callback": () => button.classList.add("hidden"),
+        });
+
         button.onclick = () => {
             if (container.lastElementChild && container.lastElementChild.classList.contains("red")) {
                 container.lastElementChild.remove();
@@ -331,7 +343,9 @@ export class Form {
             let comment = this.registration.Incident.Comment ? this.registration.Incident.Comment : "";
             let qString = Object.values(this.specialQ).join(" ● ");
             this.registration.Incident.Comment = qString ? `${qString} ● ${comment}` : comment;
-            let request = makeRequest("POST", "./api/registration", JSON.stringify(this.registration));
+            let captchaResponse = global.grecaptcha.getResponse(captchaId);
+            let body = {reg: this.registration, captcha: captchaResponse};
+            let request = makeRequest("POST", "./api/registration", JSON.stringify(body));
 
             let spinner = document.createElement("img");
             container.appendChild(spinner);
