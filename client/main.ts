@@ -1,4 +1,3 @@
-import { FileWatcherEventKind } from "../node_modules/typescript/lib/typescript";
 import { Form } from "./element";
 import { CONTENT } from "./spec";
 import { fetchTranslations } from "./translations";
